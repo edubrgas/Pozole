@@ -12,6 +12,7 @@ public class State
     int posI;
     int posJ;
     char movement='n';
+
     public State(String sts)
     {   
         int n=0;
@@ -29,7 +30,7 @@ public class State
                 n++;
             }
     }
-     
+    
     public State (int[][] board, char movement)
     {
         this.movement = movement;
@@ -78,7 +79,7 @@ public class State
     
     
     // Función sucesor
-    public ArrayList nextStates()
+    public ArrayList<State> nextStates()
     {
         ArrayList<State> next =  new ArrayList();
         int[][] newBoard = new int[4][4];
@@ -165,7 +166,7 @@ public class State
         return movement;
     }
     
-     public boolean isEqual(State s)
+    public boolean isEqual(State s)
     {
         boolean isEqual=true;
         int[][] sBoard = s.getBoard();

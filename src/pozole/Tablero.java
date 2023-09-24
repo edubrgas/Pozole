@@ -9,8 +9,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
+import java.util.Set;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -30,10 +34,11 @@ public class Tablero extends JFrame
     private final LinkedHashMap puzzle = new LinkedHashMap();
     private BufferedImage empty;
     private boolean dept = false;
+    Set<State> estadosVisitados = new HashSet<>();
     private int dr = 0;
     private File imgFile = new File("D:\\Tareas poli\\ESCOM\\4\\FIA\\1\\2nda practica\\Pozole\\imagenes\\gato.jpg");
     
-    private final String start = ";8<96:7312450>?=";
+    private final String start = "124356789:;<=>?0";
     private final String goal  = "123456789:;<=>?0"; 
    
     private final JMenuItem solveB = new JMenuItem("Solve BFS");
@@ -49,7 +54,7 @@ public class Tablero extends JFrame
       
     private void initComponents() 
     {
-        this.setTitle("8-Puzzle");
+        this.setTitle("16-Puzzle");
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -167,6 +172,7 @@ public class Tablero extends JFrame
         first.add(startState);
         queue.add(first);
         
+
         // Ciclo de búsqueda
         
         boolean deepCond = false;
@@ -180,7 +186,7 @@ public class Tablero extends JFrame
             //System.out.println("Ciclo " + m);
             ArrayList<State> l = (ArrayList<State>) queue.getFirst();
             //System.out.println("Analizando Ruta de :" + l.size());
-            // muestraEstados(l);
+            //muestraEstados(l);
             State last = (State) l.get(l.size()-1);
             //last.show();
             ArrayList<State> next = last.nextStates();  
@@ -191,7 +197,7 @@ public class Tablero extends JFrame
  
             for(State ns: next)
             {
-                if(!repetido(l,ns)) // Se escribió un método propio para verificar repetidos
+                if(!buscar(ns)) // Se escribió un método propio para verificar repetidos
                 {
                     validStates++;
                     ArrayList<State> nl = (ArrayList<State>) l.clone();
@@ -221,8 +227,8 @@ public class Tablero extends JFrame
         if(success) // Si hubo éxito
         {   
             long elapsed = System.currentTimeMillis()-startTime;
-            if(dept) this.setTitle("8-Puzzle (Deep-First Search)");
-            else this.setTitle("8-Puzzle (Breadth-First Search)"); 
+            if(dept) this.setTitle("16-Puzzle (Deep-First Search)");
+            else this.setTitle("16-Puzzle (Breadth-First Search)"); 
             JOptionPane.showMessageDialog(rootPane, "Success!! \nPath with "+path.size()+" nodes"+"\nGenerated nodes: "+totalNodes+"\nDead ends: "+ deadEnds+"\nLoops: "+m+"\nDepth reached: " + dr +"\nElapsed time: " + elapsed + " milliseconds", 
                                                     "Good News!!!", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("Success!");
@@ -270,4 +276,18 @@ public class Tablero extends JFrame
         }
         return exist;
     }
+
+    public boolean buscar(State state){
+        // Si el estado que llego, esta dentro del hash map estados Visitados. Regresa que si esta (true)
+        if(estadosVisitados.contains(state)){
+            return true;
+        }
+        // Si no lo esta, a;adelo 
+        estadosVisitados.add(state);
+        // En esta parte queremos hacer una busqueda iterativa, que busque si el estado esta dentro del hashmap
+        for(State Succ : state.nextStates())
+            buscar(Succ);
+        return false;
+    }
+
 }
