@@ -39,7 +39,7 @@ public class Tablero extends JFrame
     private File imgFile = new File("D:\\Tareas poli\\ESCOM\\4\\FIA\\1\\2nda practica\\Pozole\\imagenes\\gato.jpg");
     
     private final String start = "1234567890:;<=>?";
-    private final String goal  = "123456789:;0<=>?"; 
+    private final String goal  = "1234567809:;<=>?"; 
    
     private final JMenuItem solveB = new JMenuItem("Solve BFS");
     private final JMenuItem solveD = new JMenuItem("Solve DFS");
@@ -208,8 +208,9 @@ public class Tablero extends JFrame
                         success = true;
                         path = nl;
                     }
-                    for(State s: l)
-                        if(!buscar(s)) nl.add(s);        
+                    // for(State s: nl)
+                        if(!buscar(ns)) 
+                        nl.add(ns);     
                     
                     if(nl.size()-1>dr) dr=nl.size()-1;
                    
@@ -255,7 +256,6 @@ public class Tablero extends JFrame
             System.out.println("Path not found");
         }
     }
-    
     private void muestraEstados(ArrayList<State> ruta)
     {
         System.out.println("======");
@@ -271,7 +271,7 @@ public class Tablero extends JFrame
         boolean exist = false;
         for(State ns: l)
         {
-            if(ns.isEqual(s)&&buscar(ns)) // Un método propio para compaarar estados
+            if(ns.isEqual(s)) // Un método propio para compaarar estados
             {
                 exist = true;
                 break;
