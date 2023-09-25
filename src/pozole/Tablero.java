@@ -38,8 +38,8 @@ public class Tablero extends JFrame
     private int dr = 0;
     private File imgFile = new File("D:\\Tareas poli\\ESCOM\\4\\FIA\\1\\2nda practica\\Pozole\\imagenes\\gato.jpg");
     
-    private final String start = "124356789:;<=>?0";
-    private final String goal  = "123456789:;<=>?0"; 
+    private final String start = "1234567890:;<=>?";
+    private final String goal  = "1234567809:;<=>?"; 
    
     private final JMenuItem solveB = new JMenuItem("Solve BFS");
     private final JMenuItem solveD = new JMenuItem("Solve DFS");
@@ -165,6 +165,7 @@ public class Tablero extends JFrame
         State goalState   = new State(goal);
         ArrayDeque queue = new ArrayDeque();
         ArrayList<State> first = new ArrayList();
+        //State first = new State(start);
         ArrayList<State> path=null;
         solveB.setEnabled(false);
         solveD.setEnabled(false);
@@ -177,6 +178,7 @@ public class Tablero extends JFrame
         
         boolean deepCond = false;
         dr=0;
+        //Loops
         int m=0;
         long startTime = System.currentTimeMillis();
         while(!queue.isEmpty() && !success && !deepCond)
@@ -197,7 +199,7 @@ public class Tablero extends JFrame
  
             for(State ns: next)
             {
-                if(!buscar(ns)) // Se escribió un método propio para verificar repetidos
+                if(!repetido(l, ns)) // Se escribió un método propio para verificar repetidos
                 {
                     validStates++;
                     ArrayList<State> nl = (ArrayList<State>) l.clone();
@@ -206,7 +208,9 @@ public class Tablero extends JFrame
                         success = true;
                         path = nl;
                     }
-                    nl.add(ns);        
+                    // for(State s: nl)
+                        if(!buscar(ns)) 
+                        nl.add(ns);     
                     
                     if(nl.size()-1>dr) dr=nl.size()-1;
                    
@@ -252,7 +256,6 @@ public class Tablero extends JFrame
             System.out.println("Path not found");
         }
     }
-    
     private void muestraEstados(ArrayList<State> ruta)
     {
         System.out.println("======");
@@ -279,15 +282,17 @@ public class Tablero extends JFrame
 
     public boolean buscar(State state){
         // Si el estado que llego, esta dentro del hash map estados Visitados. Regresa que si esta (true)
+        
         if(estadosVisitados.contains(state)){
             return true;
         }
-        // Si no lo esta, a;adelo 
-        estadosVisitados.add(state);
-        // En esta parte queremos hacer una busqueda iterativa, que busque si el estado esta dentro del hashmap
-        for(State Succ : state.nextStates())
-            buscar(Succ);
-        return false;
+        else{
+            // Si no lo esta, a;adelo 
+            estadosVisitados.add(state);
+            // for(State succ : state.nextStates())
+            //     buscar(l, succ);
+            return false;
+        }
     }
 
 }
